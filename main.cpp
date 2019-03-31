@@ -1,51 +1,49 @@
-
 #include <iostream>
 #include <stdio.h>
+#include <algorithm>
 
 using namespace std;
 
-int cycleLength(int num1, int num2);
-void orderInput(int* num1, int* num2);
+void orderInput(int&, int&);
+int getMaxCycle(int, int);
+int threeNPlusOne(long);
 
-
-int main()
-{
-    int i, j, maxCycle;
-    while (scanf("%d %d", &i, &j) >= 1)
-    {
-        maxCycle = cycleLength(i, j);
-        printf("%d %d %d\n", i, j, maxCycle);
+int main() {
+    int start, end;
+    while ((scanf("%d %d", &start, &end)) == 2) {
+        int maxCycle = getMaxCycle(start, end);
+        printf("%d %d %d\n", start, end, maxCycle);
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-int cycleLength(int num1, int num2)
-{
-    int maximum = 0;
-    long n = 0;
+void orderInput(int& start, int& end) {
+    if (end < start) {
+        swap(start, end);
+    }
+}
 
-    orderInput(&num1, &num2);
-    while(num1 <= num2)
-    {
-        n = num1;
-        int counter = 1;
-        while(n != 1)
-        {
-            counter++;
-            n = (n%2!=0)?(n*3+1):n/2;
+int getMaxCycle(int start, int end) {
+    orderInput(start, end);
+
+    int maxCycle = 0;
+    for (int i = start; i <= end; i++) {
+        int cycle = threeNPlusOne(i);
+        if (cycle > maxCycle) {
+            maxCycle = cycle;
         }
-        if (counter > maximum)
-        {
-            maximum = counter;
-        }
-        num1++;
     }
 
-    return maximum;
+    return maxCycle;
 }
 
-void orderInput(int* num1, int* num2)
-{
-    if (*num1 > *num2){swap(*num2, *num1);}
+int threeNPlusOne(long number) {
+    int count = 1;
+    while (number != 1) {
+        count++;
+        number = (number % 2 == 0) ?  number / 2 : 3 * number + 1;
+    }
+
+    return count;
 }
